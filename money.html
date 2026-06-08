@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="description" content="An interdimensional luxury nexus — where beauty meets paradox, and secrets breathe. Explore unknown realms, unlock forbidden echoes, and feel the dopamine of hidden fortune.">
+    <meta name="keywords" content="futuristic, luxury horror, mystery, dopamine, secret earnings, mind-bending, explorable paradox, ethereal">
+    <meta name="author" content="OBSIDIAN VEIL">
+    <meta property="og:title" content="⟡ OBSIDIAN VEIL ⟡  //  LUXURY PARADOX">
+    <meta property="og:description" content="You shouldn't be here. Yet the mirror invited you. Explore. Earn. Unravel the beautiful nightmare.">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#0a0a14">
+    <title>⟡ OBSIDIAN VEIL ⟡  //  LUXURY // PARADOX // HORROR</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,200;14..32,400;14..32,600;14..32,800&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none; /* mysterious, but text can be selected if needed */
+        }
+
+        body {
+            background: #030307;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            color: #ede7dd;
+        }
+
+        /* particle canvas */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        /* main container */
+        .app-wrapper {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+        }
+
+        /* floating status panel ( dopamine & mystery ) */
+        .status-panel {
+            position: fixed;
+            top: 1.2rem;
+            right: 1rem;
+            background: rgba(5, 5, 15, 0.75);
+            backdrop-filter: blur(20px);
+            border-radius: 2rem;
+            padding: 0.8rem 1.3rem;
+            border: 1px solid rgba(210, 180, 140, 0.5);
+            box-shadow: 0 10px 25px -8px black;
+            z-index: 200;
+            font-family: monospace;
+            transition: all 0.2s;
+            text-align: right;
+        }
+
+        .coin-balance {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f5e7c8, #dbb87a);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .mystery-level {
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            color: #b9af9a;
+        }
+
+        /* main nav */
+        .nav-realm {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(8, 8, 18, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 60px;
+            padding: 0.6rem 1.2rem;
+            display: flex;
+            gap: 1rem;
+            border: 1px solid rgba(210, 180, 140, 0.4);
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: #ccc6b5;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            border-radius: 50px;
+            transition: 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(210, 180, 140, 0.25);
+            color: #ffe6b3;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background: rgba(210, 180, 140, 0.4);
+            box-shadow: 0 0 12px rgba(210, 180, 140, 0.3);
+            color: #ffefc0;
+        }
+
+        /* page transitions */
+        .page-transition {
+            transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.2,0.9,0.4,1.1);
+        }
+
+        .page-content {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 5rem 1.5rem 7rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .glass-panel {
+            background: rgba(12, 12, 22, 0.6);
+            backdrop-filter: blur(16px);
+            border-radius: 2.5rem;
+            border: 1px solid rgba(210, 180, 140, 0.3);
+            padding: 2rem;
+            width: 100%;
+            box-shadow: 0 30px 40px -20px black;
+        }
+
+        h1, .lux-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f3e9ce, #e7c48b, #f5e2b5);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            font-size: 2.3rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .cryptic {
+            border-left: 3px solid #e7b45a;
+            padding-left: 1rem;
+            margin: 1rem 0;
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        button.ethereal {
+            background: rgba(210, 180, 140, 0.15);
+            border: 1px solid #caa86b;
+            border-radius: 40px;
+            padding: 0.6rem 1.5rem;
+            color: #f7e9cf;
+            font-weight: 500;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        button.ethereal:hover {
+            background: rgba(210, 180, 140, 0.4);
+            box-shadow: 0 0 12px rgba(210, 180, 140, 0.3);
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .mystery-card {
+            background: rgba(0,0,0,0.5);
+            border-radius: 1.8rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(210,180,140,0.3);
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .mystery-card:hover {
+            transform: translateY(-5px);
+            border-color: #dba551;
+        }
+
+        @keyframes pulseGold {
+            0% { text-shadow: 0 0 0px gold; opacity: 1; }
+            100% { text-shadow: 0 0 12px #ffd966; opacity: 0; transform: translateY(-15px); }
+        }
+
+        .dopamine-burst {
+            position: fixed;
+            pointer-events: none;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffd966;
+            z-index: 1000;
+            animation: pulseGold 0.8s ease-out forwards;
+        }
+
+        .horror-glimmer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0,0,0,0) 40%, rgba(40,0,20,0.7) 100%);
+            pointer-events: none;
+            z-index: 999;
+            animation: fadeHorror 1s forwards;
+        }
+
+        @keyframes fadeHorror {
+            0% { opacity: 0; }
+            20% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+
+        @media (max-width: 760px) {
+            .status-panel { top: 0.6rem; right: 0.6rem; padding: 0.4rem 0.9rem; }
+            .coin-balance { font-size: 1rem; }
+            .nav-btn { width: 38px; height: 38px; font-size: 1.2rem; }
+            h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+<canvas id="particle-canvas"></canvas>
+<div class="app-wrapper">
+    <div class="status-panel" id="statusPanel">
+        <div class="coin-balance"><i class="fas fa-coins"></i> <span id="etherealBalance">0</span> <span style="font-size:0.7rem;">◈</span></div>
+        <div class="mystery-level">MYSTERY LEVEL: <span id="mysteryLevel">0</span> █</div>
+        <div id="secretWhisper" style="font-size: 9px; max-width:140px; opacity:0.7;"></div>
+    </div>
+
+    <div id="pageRoot" class="page-transition">
+        <div class="page-content" id="dynamicContent"></div>
+    </div>
+
+    <div class="nav-realm">
+        <button class="nav-btn" data-page="veil"><i class="fas fa-mask"></i></button>
+        <button class="nav-btn" data-page="mirrorweave"><i class="fas fa-dice-d6"></i></button>
+        <button class="nav-btn" data-page="chrysalis"><i class="fas fa-cube"></i></button>
+        <button class="nav-btn" data-page="luxuria"><i class="fas fa-crown"></i></button>
+        <button class="nav-btn" data-page="oracle"><i class="fas fa-eye"></i></button>
+        <button class="nav-btn" id="randomVoidBtn"><i class="fas fa-random"></i></button>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // --- dopamine & mystery system ----
+        let etherealBalance = parseInt(localStorage.getItem('obsidian_balance') || '0');
+        let mysteryLevel = parseInt(localStorage.getItem('mystery_level') || '0');
+        let hiddenTriggerCount = parseInt(localStorage.getItem('hidden_trigger') || '0');
+        let abyssUnlocked = localStorage.getItem('abyss_unlocked') === 'true';
+        let horrorFlag = false; 
+
+        const balanceSpan = document.getElementById('etherealBalance');
+        const mysterySpan = document.getElementById('mysteryLevel');
+        const whisperSpan = document.getElementById('secretWhisper');
+
+        function updateUI() {
+            balanceSpan.innerText = etherealBalance;
+            mysterySpan.innerText = mysteryLevel;
+            if(mysteryLevel >= 7 && !abyssUnlocked) {
+                whisperSpan.innerHTML = "⌛ a presence stirs...";
+            } else if(abyssUnlocked) whisperSpan.innerHTML = "⛧ the abyss gazes back ⛧";
+            else whisperSpan.innerHTML = "whispers of obsidian...";
+            localStorage.setItem('obsidian_balance', etherealBalance);
+            localStorage.setItem('mystery_level', mysteryLevel);
+            localStorage.setItem('hidden_trigger', hiddenTriggerCount);
+            localStorage.setItem('abyss_unlocked', abyssUnlocked);
+        }
+
+        function addDopamine(amount, x, y) {
+            etherealBalance += amount;
+            updateUI();
+            const burst = document.createElement('div');
+            burst.className = 'dopamine-burst';
+            burst.innerText = `+${amount} ◈`;
+            burst.style.left = (x || window.innerWidth/2) + 'px';
+            burst.style.top = (y || window.innerHeight/2) + 'px';
+            document.body.appendChild(burst);
+            setTimeout(() => burst.remove(), 800);
+            // add random mystery increment if lucky
+            if(Math.random() < 0.2 && mysteryLevel < 12) {
+                mysteryLevel = Math.min(12, mysteryLevel+1);
+                updateUI();
+                const mystBurst = document.createElement('div');
+                mystBurst.className = 'dopamine-burst';
+                mystBurst.innerText = `✦ MYSTERY +1 ✦`;
+                mystBurst.style.left = (x || window.innerWidth/2 + 30) + 'px';
+                mystBurst.style.top = (y || window.innerHeight/2) + 'px';
+                document.body.appendChild(mystBurst);
+                setTimeout(() => mystBurst.remove(), 800);
+                checkUnlockAbyss();
+            }
+        }
+
+        function triggerHorrorMoment(source = "unknown") {
+            if(horrorFlag) return;
+            horrorFlag = true;
+            const overlay = document.createElement('div');
+            overlay.className = 'horror-glimmer';
+            document.body.appendChild(overlay);
+            setTimeout(() => overlay.remove(), 1200);
+            // disturbing message
+            const msgDiv = document.createElement('div');
+            msgDiv.style.position = 'fixed';
+            msgDiv.style.bottom = '30%';
+            msgDiv.style.left = '10%';
+            msgDiv.style.right = '10%';
+            msgDiv.style.background = 'rgba(0,0,0,0.85)';
+            msgDiv.style.backdropFilter = 'blur(12px)';
+            msgDiv.style.border = '1px solid #a1442b';
+            msgDiv.style.borderRadius = '2rem';
+            msgDiv.style.padding = '1rem';
+            msgDiv.style.zIndex = '2000';
+            msgDiv.style.textAlign = 'center';
+            msgDiv.style.fontFamily = 'monospace';
+            msgDiv.innerHTML = `<i class="fas fa-skull"></i>  THE VEIL WHISPERS: "You are not a visitor. You are the echo."  <i class="fas fa-ghost"></i><br><span style="font-size:0.7rem;">something watches from the obsidian corner...</span>`;
+            document.body.appendChild(msgDiv);
+            setTimeout(() => msgDiv.remove(), 3000);
+            setTimeout(() => { horrorFlag = false; }, 4000);
+            addDopamine(3, window.innerWidth/2, window.innerHeight/2);
+        }
+
+        function checkUnlockAbyss() {
+            if(!abyssUnlocked && mysteryLevel >= 7 && hiddenTriggerCount >= 3) {
+                abyssUnlocked = true;
+                updateUI();
+                setTimeout(() => {
+                    alert("⛧ A secret door cracks open in the fabric of the nexus. ⛧\nA new page appears: THE ABYSS. Check the navigation (a dark symbol).");
+                    location.reload(); // force nav rebuild? we'll dynamically add page
+                }, 200);
+            }
+        }
+
+        // ---- Particle system ---- 
+        const canvas = document.getElementById('particle-canvas');
+        let ctx = canvas.getContext('2d');
+        let particles = [];
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.2;
+                this.speedY = (Math.random() - 0.5) * 0.2;
+                this.alpha = Math.random() * 0.5 + 0.2;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if(this.x<0 || this.x>canvas.width) this.reset();
+                if(this.y<0 || this.y>canvas.height) this.reset();
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+                ctx.fillStyle = `rgba(210, 180, 140, ${this.alpha})`;
+                ctx.fill();
+            }
+        }
+        function initParticles() { for(let i=0;i<90;i++) particles.push(new Particle()); }
+        function animate() {
+            if(!ctx) return;
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        window.addEventListener('resize', () => { resize(); initParticles(); });
+        resize(); initParticles(); animate();
+
+        // --- page definitions (Luxury, Horror hints, dopamine triggers) ----
+        const pages = {
+            veil: { name: "THE VEIL // FRACTURED DREAMS", render: () => `
+                <div class="glass-panel">
+                    <h1><i class="fas fa-feather-alt"></i>  VEIL OF FRAGMENTS</h1>
+                    <div class="cryptic">"reality is a luxury you cannot afford — yet you keep scrolling."</div>
+                    <div id="fragmentZone" style="background:rgba(0,0,0,0.4); border-radius:1.5rem; padding:1.5rem; margin:1rem 0;">
+                        <div id="liveFragment">✦ the obsidian whispers are waiting ✦</div>
+                        <button id="evokeBtn" class="ethereal" style="margin-top:1rem;"><i class="fas fa-hand-sparkles"></i> evoke fragment</button>
+                    </div>
+                    <div class="card-grid">
+                        <div class="mystery-card" data-dopamine="2"><i class="fas fa-hourglass-half"></i><h3>Echo chamber</h3><p>touch to feel the paradox pulse</p></div>
+                        <div class="mystery-card" data-dopamine="3"><i class="fas fa-skull"></i><h3>Forgotten mirror</h3><p>something might stare back</p></div>
+                    </div>
+                </div>
+            `, afterLoad: () => {
+                const fragDiv = document.getElementById('liveFragment');
+                const fragments = ["⌇ the mirror contains a reflection you never made", "⌇ luxury is a beautiful loop of despair", "⌇ your balance increases but the price is unknown", "⌇ each secret costs a piece of reality", "⌇ the horror behind the curtain smiles"];
+                function newFrag() { fragDiv.innerHTML = `<i class="fas fa-crown"></i> ${fragments[Math.floor(Math.random()*fragments.length)]} <span style="opacity:0.6;">⟡ resonance</span>`; addDopamine(1, event?.clientX, event?.clientY); }
+                document.getElementById('evokeBtn')?.addEventListener('click', (e) => { newFrag(); if(Math.random()<0.2) triggerHorrorMoment(); });
+                document.querySelectorAll('.mystery-card').forEach(card => {
+                    card.addEventListener('click', (e) => { let amt = parseInt(card.dataset.dopamine)||1; addDopamine(amt, e.clientX, e.clientY); hiddenTriggerCount++; updateUI(); checkUnlockAbyss(); if(hiddenTriggerCount%3===0) triggerHorrorMoment(); });
+                });
+                newFrag();
+            } },
+            mirrorweave: { name: "MIRRORWEAVE // REFLECTIVE MAZE", render: () => `
+                <div class="glass-panel">
+                    <h1><i class="fas fa-dragon"></i>  MIRRORWEAVE LABYRINTH</h1>
+                    <div class="cryptic">"touch the shards — each one distorts the self."</div>
+                    <div id="mirrorGrid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin:2rem 0;"></div>
+                    <div id="mirrorMsg"></div>
+                    <button id="resetMirrorBtn" class="ethereal">reset weave</button>
+                </div>
+            `, afterLoad: () => {
+                const grid = document.getElementById('mirrorGrid');
+                const symbols = ['◈', '◎', '⦿', '⬟', '✧', '☠'];
+                function build() {
+                    grid.innerHTML = '';
+                    for(let i=0;i<9;i++) {
+                        let cell = document.createElement('div');
+                        cell.className = 'mystery-card';
+                        cell.style.textAlign = 'center'; cell.style.fontSize='2rem'; cell.style.padding='0.8rem';
+                        cell.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+                        cell.addEventListener('click', (e) => {
+                            let old = cell.textContent;
+                            cell.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+                            addDopamine(1, e.clientX, e.clientY);
+                            hiddenTriggerCount++; updateUI(); checkUnlockAbyss();
+                            document.getElementById('mirrorMsg').innerHTML = `<i class="fas fa-infinity"></i> reflection fractured: ${old} ⇢ ${cell.textContent}`;
+                            if(hiddenTriggerCount % 5 === 0) triggerHorrorMoment();
+                        });
+                        grid.appendChild(cell);
+                    }
+                }
+                build();
+                document.getElementById('resetMirrorBtn')?.addEventListener('click', build);
+            } },
+            chrysalis: { name: "CHRYSALIS // TIMELINE COCOON", render: () => `
+                <div class="glass-panel">
+                    <h1><i class="fas fa-cocoon"></i>  NEXUS CHRYSALIS</h1>
+                    <div class="cryptic">"every timeline holds a secret currency."</div>
+                    <div id="timelineNodes">
+                        <div class="mystery-card" data-secret="the 8th dimension pays in forgotten memories">⟡ PHASE: SILK DREAM ⟡</div>
+                        <div class="mystery-card" data-secret="obsidian protocol: earn while you unravel">⟡ PHASE: CRYSTAL OVERLORD ⟡</div>
+                        <div class="mystery-card" data-secret="the horror is a luxury tax">⟡ PHASE: ECHO PRIME ⟡</div>
+                    </div>
+                    <div id="insightArea" style="margin-top:1rem; background:rgba(0,0,0,0.4); padding:1rem; border-radius:1rem;"></div>
+                </div>
+            `, afterLoad: () => {
+                const nodes = document.querySelectorAll('#timelineNodes .mystery-card');
+                const insightDiv = document.getElementById('insightArea');
+                nodes.forEach(node => {
+                    node.addEventListener('click', (e) => {
+                        let secret = node.dataset.secret || "unknown echo";
+                        insightDiv.innerHTML = `<i class="fas fa-eye"></i> ${secret}  +2◈`;
+                        addDopamine(2, e.clientX, e.clientY);
+                        hiddenTriggerCount++; updateUI(); checkUnlockAbyss();
+                        if(Math.random()<0.2) triggerHorrorMoment();
+                    });
+                });
+            } },
+            luxuria: { name: "LUXURIA // GILDED OBSIDIAN", render: () => `
+                <div class="glass-panel">
+                    <h1><i class="fas fa-gem"></i>  LUXURIA ECHOES</h1>
+                    <div class="cryptic">"wealth beyond measure... but the price is your attention."</div>
+                    <div class="card-grid" id="artifactGrid">
+                        <div class="mystery-card" data-value="5">📿  Necklace of Unspoken Truths  <span style="float:right;">+5◈</span></div>
+                        <div class="mystery-card" data-value="8">👑  Crown of Fractured Realities  <span style="float:right;">+8◈</span></div>
+                        <div class="mystery-card" data-value="12">💎  The Abyss Diamond  <span style="float:right;">+12◈</span></div>
+                    </div>
+                    <button id="mysteryLottery" class="ethereal"><i class="fas fa-ticket-alt"></i> Obsidian lottery (risk/reward)</button>
+                </div>
+            `, afterLoad: () => {
+                document.querySelectorAll('#artifactGrid .mystery-card').forEach(card => {
+                    card.addEventListener('click', (e) => {
+                        let val = parseInt(card.dataset.value) || 2;
+                        addDopamine(val, e.clientX, e.clientY);
+                        hiddenTriggerCount++; updateUI(); checkUnlockAbyss();
+                    });
+                });
+                document.getElementById('mysteryLottery')?.addEventListener('click', (e) => {
+                    let roll = Math.random();
+                    if(roll < 0.7) { let gain = Math.floor(Math.random()*15)+3; addDopamine(gain, e.clientX, e.clientY); alert(`✦ You gained ${gain} ethereal coins! ✦`); }
+                    else { alert("⛧ The mirror rejects you... but mystery deepens."); mysteryLevel = Math.min(12, mysteryLevel+1); updateUI(); triggerHorrorMoment(); }
+                    hiddenTriggerCount+=2; updateUI(); checkUnlockAbyss();
+                });
+            } },
+            oracle: { name: "NULL ORACLE // PARADOX WELL", render: () => `
+                <div class="glass-panel">
+                    <h1><i class="fas fa-chalkboard-user"></i>  NULL ORACLE</h1>
+                    <div class="cryptic">"ask anything — the answer will never satisfy, but the mystery will grow."</div>
+                    <input type="text" id="oracleInput" class="oracle-input" style="background:rgba(0,0,0,0.7); border:1px solid #b8945a; border-radius:60px; width:100%; padding:0.8rem 1rem; color:#f5e2b5;" placeholder="whisper your question...">
+                    <button id="askBtn" class="ethereal" style="margin-top:1rem; width:100%;">⟡ invoke reply ⟡</button>
+                    <div id="oracleResponse" style="margin-top:1.5rem; background:rgba(0,0,0,0.5); border-radius:1rem; padding:1rem;"></div>
+                </div>
+            `, afterLoad: () => {
+                const input = document.getElementById('oracleInput');
+                const resp = document.getElementById('oracleResponse');
+                const replies = ["the question folds into a luxury paradox.", "you will earn 0◈, but confusion is priceless.", "behind the answer lies a silent horror.", "mystery level increased by 1.", "the echo says: wealth is an illusion, but dopamine is real.", "⛧ something breathes behind the text ⛧"];
+                document.getElementById('askBtn')?.addEventListener('click', (e) => {
+                    let q = input.value.trim() || "void";
+                    let ans = replies[Math.floor(Math.random()*replies.length)];
+                    resp.innerHTML = `<i class="fas fa-comment-dots"></i> " ${q} " <br> ➜ ${ans}`;
+                    addDopamine(1, e.clientX, e.clientY);
+                    mysteryLevel = Math.min(12, mysteryLevel+1); updateUI(); checkUnlockAbyss();
+                    if(Math.random()<0.3) triggerHorrorMoment();
+                    input.value = '';
+                });
+            } }
+        };
+
+        // hidden abyss page (unlocked)
+        const abyssPage = {
+            name: "THE ABYSS // UNSPEAKABLE LUXURY", render: () => `
+                <div class="glass-panel" style="border-color:#a1442b;">
+                    <h1 style="background: linear-gradient(135deg,#b33b2c,#5c1a0f); background-clip:text; color:transparent;"><i class="fas fa-skull"></i>  THE ABYSS ECHO</h1>
+                    <div class="cryptic">"you found it. the horror is not outside — it's the balance. you are now part of the eternal secret."</div>
+                    <div id="abyssRevelation"><p style="font-size:1.3rem;">⟡ the ethereal coins are a reflection of obsession ⟡</p><p>+100◈ bestowed as a curse.</p></div>
+                    <button id="abyssFinalButton" class="ethereal">witness the final paradox</button>
+                    <div id="abyssMessage"></div>
+                </div>
+            `, afterLoad: () => {
+                addDopamine(100, window.innerWidth/2, window.innerHeight/2);
+                mysteryLevel = 12; updateUI();
+                document.getElementById('abyssFinalButton')?.addEventListener('click', () => {
+                    const msgDiv = document.getElementById('abyssMessage');
+                    msgDiv.innerHTML = "<span style='color:#c97e5a;'>⛧ you are now bound to the obsidian ledger. no escape, only beautiful horror. ⛧</span>";
+                    triggerHorrorMoment();
+                    addDopamine(50, event?.clientX, event?.clientY);
+                });
+            }
+        };
+
+        let currentPageId = 'veil';
+        let allPages = {...pages};
+        function updateNavActive() {
+            document.querySelectorAll('.nav-btn[data-page]').forEach(btn => {
+                let pid = btn.getAttribute('data-page');
+                if((pid === currentPageId) || (pid === 'abyss' && currentPageId==='abyss')) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+        }
+
+        async function loadPage(pageId) {
+            if(pageId === 'abyss' && !abyssUnlocked) pageId = 'veil';
+            if(!allPages[pageId]) pageId = 'veil';
+            const contentDiv = document.getElementById('dynamicContent');
+            const wrapper = document.querySelector('.page-transition');
+            wrapper.style.opacity = '0';
+            wrapper.style.transform = 'scale(0.97)';
+            setTimeout(() => {
+                const page = allPages[pageId];
+                contentDiv.innerHTML = page.render();
+                document.title = `⟡ ${page.name} ⟡ // OBSIDIAN VEIL`;
+                if(page.afterLoad) page.afterLoad();
+                currentPageId = pageId;
+                updateNavActive();
+                wrapper.style.opacity = '1';
+                wrapper.style.transform = 'scale(1)';
+                window.scrollTo({top:0});
+                history.pushState({page: pageId}, '', `#${pageId}`);
+            }, 250);
+        }
+
+        function randomPage() { let ids = Object.keys(allPages); let r = ids[Math.floor(Math.random()*ids.length)]; loadPage(r); }
+
+        window.addEventListener('popstate', (e) => { if(e.state?.page) loadPage(e.state.page); else loadPage('veil'); });
+        document.querySelectorAll('.nav-btn[data-page]').forEach(btn => {
+            btn.addEventListener('click', () => { let p = btn.getAttribute('data-page'); loadPage(p); });
+        });
+        document.getElementById('randomVoidBtn')?.addEventListener('click', () => randomPage());
+
+        // add abyss to navigation conditionally
+        function rebuildNavIfAbyss() {
+            if(abyssUnlocked && !document.querySelector('.nav-btn[data-page="abyss"]')) {
+                const nav = document.querySelector('.nav-realm');
+                const btn = document.createElement('button');
+                btn.className = 'nav-btn';
+                btn.setAttribute('data-page', 'abyss');
+                btn.innerHTML = '<i class="fas fa-eye"></i>';
+                btn.addEventListener('click', () => loadPage('abyss'));
+                nav.appendChild(btn);
+                allPages.abyss = abyssPage;
+            }
+        }
+        setInterval(() => { rebuildNavIfAbyss(); updateUI(); }, 500);
+        rebuildNavIfAbyss();
+        loadPage(window.location.hash.slice(1) || 'veil');
+        updateUI();
+    })();
+</script>
+</body>
+</html>
